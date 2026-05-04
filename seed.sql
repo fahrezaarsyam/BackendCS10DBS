@@ -16,6 +16,7 @@ CREATE TABLE IF NOT EXISTS items (
     name VARCHAR(200) NOT NULL,
     price INTEGER NOT NULL,
     stock INTEGER NOT NULL DEFAULT 0,
+    description TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
