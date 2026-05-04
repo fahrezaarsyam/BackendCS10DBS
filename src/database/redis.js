@@ -1,22 +1,13 @@
-const { createClient } = require('redis');
+// Mock Redis client to bypass Railway resource limits
+const redisClient = {
+  on: (event, callback) => {},
+  connect: () => Promise.resolve(),
+  get: () => Promise.resolve(null),
+  setEx: () => Promise.resolve(),
+  del: () => Promise.resolve(),
+  xAdd: () => Promise.resolve('mock-id'),
+};
 
-const redisClient = createClient(
-  process.env.REDIS_URL
-    ? { url: process.env.REDIS_URL }
-    : {
-        socket: {
-          host: process.env.REDIS_HOST || '127.0.0.1',
-          port: process.env.REDIS_PORT || 6379,
-        },
-      }
-);
-
-redisClient.on('error', (err) => {
-  console.error('Redis Error:', err);
-});
-
-redisClient.connect()
-  .then(() => console.log('Redis connected successfully'))
-  .catch(console.error);
+console.log('Redis mocked: App will run without a physical Redis service.');
 
 module.exports = redisClient;
