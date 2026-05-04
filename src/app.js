@@ -16,7 +16,14 @@ const app = express();
 
 // Security middleware
 app.use(cors({
-  origin: ['http://localhost:3001', process.env.CORS_ORIGIN].filter(Boolean),
+  origin: (origin, callback) => {
+    // Allow all origins in production or local development
+    if (!origin || process.env.CORS_ORIGIN === '*' || origin.includes('vercel.app') || origin.includes('localhost')) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,
